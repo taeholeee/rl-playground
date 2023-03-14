@@ -2,13 +2,9 @@
 name = "rl-playground"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Taeho Lee <theodore.taeho.lee@gmail.com>"]
 readme = "README.md"
 packages = [{include = "rl_playground"}]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-
 
 [build-system]
 requires = ["poetry-core"]

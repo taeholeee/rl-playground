@@ -1,31 +1,22 @@
-SHELL := /bin/bash
-POETRY := $(shell command -v poetry 2> /dev/null)
-REPO_ROOT := $(shell git rev-parse --show-toplevel)
-PROTOC := $(shell command -v protoc 2> /dev/null)
-
+CONDA_ENV_PATH=$$(conda info --base)/envs/rl-playground
 
 pre-commit:
-	poetry run pre-commit run
+	pre-commit run
 
 pre-commit-all:
-	poetry run pre-commit run --all-files
+	pre-commit run --all-files
 
-utest:
-	poetry run pytest tests -s --verbose --cov=mnflow/ --cov-report=html --cov-report=term-missing --ignore=tests/components
+unittest:
+	pytest test -s -v
 
-init-dev:
-ifndef POETRY
-	@echo "Poetry could not be found. Installing it ..."
-	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-else
-	poetry run pip install --upgrade pip
-	poetry install
+tree:
+	tree -I "*data|*save|.pkl|*.png|*.txt|$(shell cat .gitignore | tr -s '\n' '|' )"
 
-	rm -f $(REPO_ROOT)/.git/hooks/pre-commit && rm -f $(REPO_ROOT)/.git/hooks/pre-commit.legacy
-	cd $(REPO_ROOT)
-	poetry run pre-commit install
-
-	poetry run python hooks/add_submodules.py $(REPO_ROOT)
-	git submodule init
-	git submodule update --recursive
-endif
+init:
+	conda env create -f environment.yaml --force
+	mkdir -p ${CONDA_ENV_PATH}/etc/conda/activate.d
+	mkdir -p ${CONDA_ENV_PATH}/etc/conda/deactivate.d
+	cp scripts/set_conda_env_var.sh ${CONDA_ENV_PATH}/etc/conda/activate.d/
+	cp scripts/unset_conda_env_var.sh ${CONDA_ENV_PATH}/etc/conda/deactivate.d/
+	${CONDA_ENV_PATH}/bin/pip install -e .
+	${CONDA_ENV_PATH}/bin/pre-commit install -f

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+unset LD_LIBRARY_PATH
+unset D4RL_SUPPRESS_IMPORT_ERROR

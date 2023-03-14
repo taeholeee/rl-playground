@@ -1,0 +1,17 @@
+name: rl-playground
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - setuptools==65.5.0
+    - stable-baselines3
+    - box2d # brew install swig cmake
+    - box2d-py
+    - box2d-kengz
+    - huggingface_sb3
+    - pyglet==1.5.1
+    - pre-commit
+    - pytest
